@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     int TEST_SIZE;
 
     ofstream myfile;
-    myfile.open ("matrixMultiplicationParallel.txt");
+    myfile.open ("matrixMultiplicationParallelOptimized.txt");
 
     for(int SIZE=200; SIZE <= 2000; SIZE=SIZE+200){
         double sampleTime[SAMPLE_SIZE];
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
         for(int i=0; i<TEST_SIZE; i++){
             elapsedTime[i] = getElapsedTime(SIZE);
         }
-
+        
         fmean = getMean(elapsedTime, TEST_SIZE);
         fs = getStd(elapsedTime, TEST_SIZE);
         myfile << SIZE << " " << fmean << " " << fs << " " << TEST_SIZE << " " << mean << " " << s << endl;
@@ -103,12 +103,17 @@ void printMatrix(double** matrix, int size){
 
 long matrixMultiplicationSeq(double** matrixA, double** matrixB, double** matrixResult, int size) {
     long startTime, endTime, elapsedTime;
-    double sum;
-
-    int i,j,k;
 
     startTime = getCurrentTime(); // Get the starting time
+    double** matrixBT = new double*[size];
+    for (int p = 0; p < size; p++) {
+        matrixBT[p] = new double[size];
+        for (int q = 0; q < size; q++) {
+            matrixBT[p][q] = matrixB[q][p];
+        }
+    }
 
+    int i,j;
     #pragma omp parallel shared(matrixResult) private(i,j,k)
     {
         #pragma omp for  schedule(static)
@@ -116,7 +121,7 @@ long matrixMultiplicationSeq(double** matrixA, double** matrixB, double** matrix
             for (j = 0; j < size; j++) {
                 double sum = 0;
                 for (k = 0; k < size; k++) {
-                    sum += matrixA[i][k] * matrixB[k][j];
+                    sum += matrixA[i][k] * matrixB[j][k];
                 }
                 matrixResult[i][j] = sum;
             }
