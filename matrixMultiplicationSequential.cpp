@@ -129,7 +129,7 @@ long getElapsedTime(int size){
     delete matB;
     delete matResult;
 
-    return elapsedTime;
+    return (double)elapsedTime/1000000;
 }
 
 double getMean(double array[], int size){
