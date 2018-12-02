@@ -4,6 +4,7 @@
 #include <sys/time.h>
 #include <cstdlib>
 #include <cmath>
+#include <fstream>
 
 using namespace std;
 
@@ -24,7 +25,11 @@ int main(int argc, char *argv[])
     double Z = 1.96;
     double R = 5;
 
-    double TEST_SIZE;
+    int TEST_SIZE;
+
+    ofstream myfile;
+    myfile.open ("matrixMultiplicationSeq.txt");
+
     for(int SIZE=200; SIZE <= 2000; SIZE=SIZE+200){
         double sampleTime[SAMPLE_SIZE];
         double mean, s;
@@ -35,8 +40,16 @@ int main(int argc, char *argv[])
         s = getStd(sampleTime, SAMPLE_SIZE);
         TEST_SIZE = getTestSize(mean, s, Z, R);
         cout << SIZE << ": " << TEST_SIZE << endl;
+
+        double elapsedTime[TEST_SIZE];
+        for(int i=0; i<TEST_SIZE; i++){
+            elapsedTime[i] = getElapsedTime(SIZE);
+        }
+        mean = getMean(elapsedTime, TEST_SIZE);
+        myfile << SIZE << " " << mean << endl;
     }  
 
+    myfile.close();
     return 0;
 }
 
