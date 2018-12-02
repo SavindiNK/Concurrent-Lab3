@@ -14,7 +14,7 @@ double** makeEmptyMatrix(int size);
 double** makeMatrix(int size, int start, int end);
 void printMatrix(double** matrix, int size);
 long matrixMultiplicationSeq(double** matrixA, double** matrixB, double** matrixResult, int size);
-long getElapsedTime(int size);
+double getElapsedTime(int size);
 double getMean(double array[], int size);
 double getStd(double array[], int size);
 int getTestSize(double mean, double s,  double z, double r);
@@ -118,7 +118,7 @@ long matrixMultiplicationSeq(double** matrixA, double** matrixB, double** matrix
     return elapsedTime;
 }
 
-long getElapsedTime(int size){
+double getElapsedTime(int size){
     double** matA = makeMatrix(size, 0, 100);
     double** matB = makeMatrix(size, 0, 100);
     double** matResult = makeEmptyMatrix(size);
