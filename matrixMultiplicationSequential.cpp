@@ -21,7 +21,7 @@ int getTestSize(double mean, double s,  double z, double r);
 
 int main(int argc, char *argv[]) 
 {
-    int SAMPLE_SIZE = 5;
+    int SAMPLE_SIZE = 20;
     double Z = 1.96;
     double R = 5;
 
@@ -46,7 +46,8 @@ int main(int argc, char *argv[])
             elapsedTime[i] = getElapsedTime(SIZE);
         }
         mean = getMean(elapsedTime, TEST_SIZE);
-        myfile << SIZE << " " << mean << endl;
+        s = getStd(elapsedTime, TEST_SIZE);
+        myfile << SIZE << " " << mean << " " << s << endl;
     }  
 
     myfile.close();
