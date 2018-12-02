@@ -72,7 +72,7 @@ long long matrixMultiplicationSeq(double *matA, double *matB, double *result, in
     return time_taken;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     int SIZE = 500;
     double matA[SIZE][SIZE];
