@@ -21,7 +21,7 @@ int getTestSize(double mean, double s,  double z, double r);
 
 int main(int argc, char *argv[]) 
 {
-    int SAMPLE_SIZE = 10;
+    int SAMPLE_SIZE = 5;
     double Z = 1.96;
     double R = 5;
 
@@ -150,8 +150,11 @@ double getStd(double array[], int size, double mean){
 
 int getTestSize(double mean, double s, double z, double r){
     int size = (int)pow((100*z*s)/(r*mean),2);
-    if(size < 10){
-        size = 10;
+    if(size < 5){
+        size = 5;
+    }
+    if(size > 15){
+        size = 15;
     }
     return size;
 }
