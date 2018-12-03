@@ -16,7 +16,7 @@ void printMatrix(double** matrix, int size);
 long matrixMultiplicationSeq(double** matrixA, double** matrixB, double** matrixResult, int size);
 double getElapsedTime(int size);
 double getMean(double array[], int size);
-double getStd(double array[], int size);
+double getStd(double array[], int size, double mean);
 int getTestSize(double mean, double s,  double z, double r);
 
 int main(int argc, char *argv[]) 
@@ -39,18 +39,24 @@ int main(int argc, char *argv[])
             sampleTime[i] = getElapsedTime(SIZE);
         }
         mean = getMean(sampleTime, SAMPLE_SIZE);
-        s = getStd(sampleTime, SAMPLE_SIZE);
+        s = getStd(sampleTime, SAMPLE_SIZE, mean);
         TEST_SIZE = getTestSize(mean, s, Z, R);
         cout << SIZE << ": " << TEST_SIZE << endl;
 
-        double elapsedTime[TEST_SIZE];
-        for(int i=0; i<TEST_SIZE; i++){
-            elapsedTime[i] = getElapsedTime(SIZE);
+        if(TEST_SIZE > 5){
+            double elapsedTime[TEST_SIZE];
+            for(int i=0; i<TEST_SIZE; i++){
+                elapsedTime[i] = getElapsedTime(SIZE);
+            }
+            fmean = getMean(elapsedTime, TEST_SIZE);
+            fs = getStd(elapsedTime, TEST_SIZE, mean);
+        }else{
+            fmean = mean;
+            fs = s;
         }
-
-        fmean = getMean(elapsedTime, TEST_SIZE);
-        fs = getStd(elapsedTime, TEST_SIZE);
-        myfile << SIZE << " " << fmean << " " << fs << " " << TEST_SIZE << " " << mean << " " << s << endl;
+        
+        myfile << SIZE << " " << fmean << " " << fs << " " << TEST_SIZE << endl;
+        cout << fmean << fs << endl;
     }  
 
     myfile.close();
@@ -151,8 +157,7 @@ double getMean(double array[], int size){
     return sum/size;
 }
 
-double getStd(double array[], int size){
-    double mean = getMean(array, size);
+double getStd(double array[], int size, double mean){
     double std = 0;
     for(int i=0; i< size; i++){
         std += pow(array[i]-mean, 2);
@@ -164,6 +169,9 @@ int getTestSize(double mean, double s, double z, double r){
     int size = (int)pow((100*z*s)/(r*mean),2);
     if(size < 5){
         size = 5;
+    }
+    if(size > 15){
+        size = 15;
     }
     return size;
 }
